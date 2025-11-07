@@ -1,22 +1,31 @@
 //your JS code here. If required.
-function processArray(){
-	let output=document.getElementById("output");
-	new Promise((resolve)=>{
-		setTimeout(()=>{
-			resolve([1,2,3,4])
-		},3000)
-	})
-	.then((arr)=>{
-		const evens=arr.filter(num=>num%2===0);
-		setTimeout(()=>{
-			output.textContent=evens;
-		},1000);
-		return evens;
-	})
-	.then((evens)=>{
-		const double=evens.map(n=>n*2);
-		setTimeout(()=>{
-			output.textContent=double;
-		},2000);
-	});
+function processArray() {
+  const output = document.getElementById("output");
+
+  // Step 1: Return the array right away, not after 3 sec
+  Promise.resolve([1, 2, 3, 4])
+
+    // Step 2: Filter evens after 1 second
+    .then(arr => {
+      return new Promise(resolve => {
+        setTimeout(() => {
+          const evens = arr.filter(num => num % 2 === 0);
+          output.textContent = evens;
+          resolve(evens);
+        }, 1000);
+      });
+    })
+
+    // Step 3: Double evens after another 2 seconds
+    .then(evens => {
+      return new Promise(resolve => {
+        setTimeout(() => {
+          const doubled = evens.map(num => num * 2);
+          output.textContent = doubled;
+          resolve(doubled);
+        }, 2000);
+      });
+    });
 }
+
+processArray();
